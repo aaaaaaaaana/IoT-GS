@@ -4,6 +4,8 @@
 
 ˖°☀️💡 ***A energia solar nunca esteve tão fácil e inteligente*** ☀︎ ࿐࿔
 
+<br>
+
 # Integrantes
     RM: 551401  Turma: 2TDSPF  Nome: Ana Luiza Fontes 
     RM: 86293   Turma: 2TDSA   Nome: João Vito
