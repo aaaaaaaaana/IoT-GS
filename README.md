@@ -16,7 +16,7 @@
 <br>
 
 # Sobre o Projeto
-NOME é a plataforma digital que te coloca no controle da sua energia solar, oferecendo monitoramento em tempo real para quem já possui placas solares, revelando como pode economizar e contribuir para um desenvolvimento mais sustentável através de gráficos durante os meses. Já para pessoas que ainda não possui placas solares, terá cálculos personalizados de acordo com o consumo de kW mensal, comparando o custo da energia costumeira com a economia que você terá com placas solares e ajudar na transição para um futuro mais sustentável.
+NOME é a plataforma digital que te coloca no controle da sua energia solar, oferecendo monitoramento em tempo real para quem já possui placas solares, revelando como pode economizar e contribuir para um desenvolvimento mais sustentável através de gráficos durante os meses. Já para pessoas que ainda não possuem placas solares, terá cálculos personalizados de acordo com o consumo de kW mensal, comparando o custo da energia costumeira com a economia que você terá com placas solares e ajudar na transição para um futuro mais sustentável.
 
 
 <br>
