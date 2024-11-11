@@ -2,7 +2,7 @@
 
 # SolarTracker <img src="documentacao/solartracker.png" alt="SolarTracker" width="35" height="35" /> 
 
-˖°☀️💡 ***A energia solar nunca esteve tão fácil e inteligente*** <img width="24" height="24" src="https://img.icons8.com/external-nawicon-flat-nawicon/64/external-solar-panel-energy-nawicon-flat-nawicon-2.png" alt="external-solar-panel-energy-nawicon-flat-nawicon-2"/> ࿐࿔
+˖°☀️💡 ***A energia solar nunca esteve tão fácil e inteligente*** <img width="34" height="34" src="https://img.icons8.com/external-nawicon-flat-nawicon/64/external-solar-panel-energy-nawicon-flat-nawicon-2.png" alt="external-solar-panel-energy-nawicon-flat-nawicon-2"/> ࿐࿔
 
 <br>
 
