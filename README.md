@@ -1,6 +1,6 @@
 # IoT-GS
 
-# NOME <link type="image/png" sizes="16x16" rel="icon" href=".../icons8-painel solar-external-flaticons-lineal-color-flat-icons-16.png">
+# NOME <img width="64" height="64" src="https://img.icons8.com/external-nawicon-flat-nawicon/64/external-solar-panel-energy-nawicon-flat-nawicon-2.png" alt="external-solar-panel-energy-nawicon-flat-nawicon-2"/>
 
 ˖°☀️💡 ***A energia solar nunca esteve tão fácil e inteligente*** ☀︎ ࿐࿔
 
