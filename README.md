@@ -31,11 +31,14 @@ O arduino coleta dados de consumo de energia da residência e transmite para o a
 Video de demonstração de como rodar no vs code [Demonstração](https://youtu.be/u3UUbkoHH0w/)
 
 ## Abrindo o projeto
-1.
-2.
-3. 
-4. 
-5. 
+1. Clone o repositorio no VS Code.
+2. Instale a extensao PlatformIO e WokWi no VS Code.
+3. No projeto, va para o src e abra para acessar o codigo. 
+4. Com as extensoes baixadas, compile o projeto apertando no check no canto inferior esquerdo.
+5. Va para o arquivo wokwi.toml.
+6. Mude o que esta dentro do firmware e elf para o que apareceu no terminal com final .bin para o elf e .elf para o firmware.
+7. Aperte ctrl + shit + p e procure Wokwi Start simulation ou para mac aperte cmd + shit + p.
+8. Rodar o Iot e testa-lo.
 
 
 
