@@ -49,7 +49,6 @@ bool signupOK = false;
 
 
 void setup() {  
-
   dht.begin();
 
   Serial.begin(115200);
@@ -60,38 +59,38 @@ void setup() {
   digitalWrite(pinoDHT, LOW);
   ultimoTempo = millis();
 
-
-  // Quando conectar no wifi vai verificar se conectou e manda uma mensagem no log
-  WiFi.begin(SSID, SSID_PASSWORD);
+  // Conexão Wi-Fi
   Serial.print("Conectando à rede Wi-Fi");
+  WiFi.begin(SSID, SSID_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
-
   }
-  Serial.println("Conectado à rede Wi-Fi!");
- 
+  Serial.println("\nConectado à rede Wi-Fi!");
 
+  // Thinger.IO configuração
   thing["Consumo de Energia"] >> outputValue(consumoEnergia);
 
+  // Configuração do Firebase
   config.api_key = FIREBASE_AUTH;
-
   config.database_url = FIREBASE_HOST;
 
-  if (Firebase.signUp(&config, &auth, "", "")){
-    signupOK = true;
-  }
-  else{
-    Serial.printf("%s\n", config.signer.signupError.message.c_str());
-  }
+  // Configuração de autenticação anônima
+  auth.user.email = "";
+  auth.user.password = "";
 
-
-  
+  // Inicializar Firebase
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
 
-
+  // Verificar conexão ao Firebase
+  if (Firebase.ready()) {
+    Serial.println("Firebase conectado com sucesso!");
+  } else {
+    Serial.println("Erro ao conectar ao Firebase.");
+  }
 }
+
 
 
 
@@ -99,22 +98,19 @@ void leituraConsumo() {
   delay(5000);
 
   int valorPotenciometro = analogRead(potenciometro);
-  
+
   if (valorPotenciometro == 0) {
     Serial.println("Erro: leitura do potenciômetro é zero. Verifique as conexões.");
     return;
   }
-  
 
   float maxValorPot = 4095.0; 
   float maxConsumo = 4095.0; 
   float percentual = valorPotenciometro / maxValorPot; 
   consumoTaxa = percentual * maxConsumo; 
-  
 
   unsigned long tempoAtual = millis();
   float tempoDecorrido = (tempoAtual - ultimoTempo) / 1000.0;  
-  
 
   consumoEnergia += consumoTaxa * tempoDecorrido;
 
@@ -133,6 +129,18 @@ void leituraConsumo() {
     Serial.print("Erro ao atualizar consumo: ");
     Serial.println(fbdo.errorReason());
   }
+
+  Serial.print("Valor do Potenciômetro: ");
+  Serial.print(valorPotenciometro);
+  Serial.print(" | Taxa de Consumo: ");
+  Serial.print(consumoTaxa, 1);
+  Serial.print(" kWh/s | Energia Consumida: ");
+  Serial.print(consumoEnergia, 1); 
+  Serial.println(" kWh");
+
+  thing["Consumo de Energia"] >> outputValue(consumoEnergia);
+}
+
   
 
   Serial.print("Valor do Potenciômetro: ");
@@ -150,45 +158,41 @@ void leituraConsumo() {
 
 
  
-void leituraSensor(){
-
+void leituraSensor() {
   temp = dht.readTemperature();
   umid = dht.readHumidity();
   delay(2000);
 
   Serial.print("Temperatura: ");
   Serial.print(temp);
-
   Serial.print(" graus - Umidade: ");
   Serial.print(umid);
   Serial.println(" %");
 
-   thing["Temperatura"] >> outputValue(temp);
-
-  // Atualizar temperatura e umidade no Firebase
-  if (Firebase.RTDB.getFloat(&fbdo, "/temperatura", temp)) {
+  // Atualizar valores no Firebase
+  if (Firebase.RTDB.setFloat(&fbdo, "/temperatura", temp)) {
     Serial.println("Temperatura atualizada no Firebase!");
   } else {
     Serial.print("Erro ao atualizar temperatura: ");
     Serial.println(fbdo.errorReason());
   }
 
-  if (Firebase.RTDB.getFloat(&fbdo, "/umidade", umid)) {
+  if (Firebase.RTDB.setFloat(&fbdo, "/umidade", umid)) {
     Serial.println("Umidade atualizada no Firebase!");
   } else {
     Serial.print("Erro ao atualizar umidade: ");
     Serial.println(fbdo.errorReason());
   }
 
+  // Atualizar Thinger.IO
+  thing["Temperatura"] >> outputValue(temp);
 }
+
  
 void loop() {
-
-  leituraConsumo(); 
+  leituraConsumo();
   leituraSensor();
-
   thing.handle();
-
 }
  
 
