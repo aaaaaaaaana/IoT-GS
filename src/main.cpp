@@ -3,7 +3,6 @@
 #include <Arduino.h>
 #include <DHT.h>
 #include <Wire.h>
-#include <Firebase_ESP_Client.h>
 
 #define potenciometro 34 // Pino do potenciometro definido
 
@@ -20,12 +19,7 @@ DHT dht(pinoDHT, tipoDHT);
 
 ThingerESP32 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
 
-#define FIREBASE_HOST "https://esp32-consumo-default-rtdb.firebaseio.com/"
-#define FIREBASE_AUTH "AIzaSyDviGoRlOMPn4oMBAoBBrmfz88YaaJ0X3E"
 
-FirebaseData fbdo;
-FirebaseAuth auth;
-FirebaseConfig config;
 
 float consumoEnergia = 0;
 unsigned long ultimoTempo = 0;
@@ -37,8 +31,9 @@ unsigned long sendDataPrevMillis = 0;
 int count = 0;
 bool signupOK = false;
 
-void setup()
-{
+
+
+void setup() {  
 
   dht.begin();
 
@@ -61,28 +56,11 @@ void setup()
   Serial.println("Conectado à rede Wi-Fi!");
 
   thing["Consumo de Energia"] >> outputValue(consumoEnergia);
+  
+  thing["Temperatura"] >> outputValue(temp);
 
-  // Configuração do Firebase
-  config.api_key = FIREBASE_AUTH;
-  config.database_url = FIREBASE_HOST;
 
-  // Configuração de autenticação anônima
-  auth.user.email = "";
-  auth.user.password = "";
 
-  // Inicializar Firebase
-  Firebase.begin(&config, &auth);
-  Firebase.reconnectWiFi(true);
-
-  // Verificar conexão ao Firebase
-  if (Firebase.ready())
-  {
-    Serial.println("Firebase conectado com sucesso!");
-  }
-  else
-  {
-    Serial.println("Erro ao conectar ao Firebase.");
-  }
 }
 
 void leituraConsumo()
@@ -118,16 +96,6 @@ void leituraConsumo()
     digitalWrite(pinoDHT, HIGH);
   }
 
-  // Atualizar valores no Firebase
-  if (Firebase.RTDB.setFloat(&fbdo, "/consumoEnergia", consumoEnergia))
-  {
-    Serial.println("Consumo atualizado no Firebase!");
-  }
-  else
-  {
-    Serial.print("Erro ao atualizar consumo: ");
-    Serial.println(fbdo.errorReason());
-  }
 
   Serial.print("Valor do Potenciômetro: ");
   Serial.print(valorPotenciometro);
@@ -154,26 +122,6 @@ void leituraSensor()
   Serial.print(umid);
   Serial.println(" %");
 
-  // Atualizar valores no Firebase
-  if (Firebase.RTDB.setFloat(&fbdo, "/temperatura", temp))
-  {
-    Serial.println("Temperatura atualizada no Firebase!");
-  }
-  else
-  {
-    Serial.print("Erro ao atualizar temperatura: ");
-    Serial.println(fbdo.errorReason());
-  }
-
-  if (Firebase.RTDB.setFloat(&fbdo, "/umidade", umid))
-  {
-    Serial.println("Umidade atualizada no Firebase!");
-  }
-  else
-  {
-    Serial.print("Erro ao atualizar umidade: ");
-    Serial.println(fbdo.errorReason());
-  }
 
   // Atualizar Thinger.IO
   thing["Temperatura"] >> outputValue(temp);
