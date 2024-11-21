@@ -55,4 +55,4 @@ Video de demonstração de como rodar no vs code [Demonstração](https://youtu.
 
 ## Video Apresentação
 
-Video de apresentação do projeto [Apresentação](hhttps://youtu.be/DYHntb6ZMdI)
+Video de apresentação do projeto [Apresentação](https://youtu.be/DYHntb6ZMdI)
