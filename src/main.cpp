@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <DHT.h>
 #include <Wire.h>
+#include <IOXhop_FirebaseESP32.h>
 
 #define potenciometro 34 // Pino do potenciometro definido
 
@@ -19,7 +20,9 @@ DHT dht(pinoDHT, tipoDHT);
 
 ThingerESP32 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
 
-
+//
+#define FIREBASE_HOST "https://solartracker-a4923-default-rtdb.firebaseio.com/"
+#define FIREBASE_AUTH "AIzaSyAeFHCvKGzKSxor_3tz9hTIimv742fJcdA"
 
 float consumoEnergia = 0;
 unsigned long ultimoTempo = 0;
@@ -31,9 +34,8 @@ unsigned long sendDataPrevMillis = 0;
 int count = 0;
 bool signupOK = false;
 
-
-
-void setup() {  
+void setup()
+{
 
   dht.begin();
 
@@ -47,20 +49,20 @@ void setup() {
 
   // Quando conectar no wifi vai verificar se conectou e manda uma mensagem no log
   WiFi.begin(SSID, SSID_PASSWORD);
+
   Serial.print("Conectando à rede Wi-Fi");
+
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(500);
+    delay(300);
     Serial.print(".");
   }
   Serial.println("Conectado à rede Wi-Fi!");
 
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+
   thing["Consumo de Energia"] >> outputValue(consumoEnergia);
-  
   thing["Temperatura"] >> outputValue(temp);
-
-
-
 }
 
 void leituraConsumo()
@@ -96,7 +98,6 @@ void leituraConsumo()
     digitalWrite(pinoDHT, HIGH);
   }
 
-
   Serial.print("Valor do Potenciômetro: ");
   Serial.print(valorPotenciometro);
   Serial.print(" | Taxa de Consumo: ");
@@ -106,6 +107,18 @@ void leituraConsumo()
   Serial.println(" kWh");
 
   thing["Consumo de Energia"] >> outputValue(consumoEnergia);
+
+  bool consumo = Firebase.pushFloat("/energia/consumo", consumoEnergia);
+
+  if (consumoEnergia) {
+    Serial.println("Potenciômetro registrado no Firebase!");
+  } else {
+    Serial.println("Falha ao registrar potenciômetro no Firebase:");
+    Serial.println(Firebase.error()); 
+  }
+
+
+
 }
 
 void leituraSensor()
@@ -122,9 +135,20 @@ void leituraSensor()
   Serial.print(umid);
   Serial.println(" %");
 
-
   // Atualizar Thinger.IO
   thing["Temperatura"] >> outputValue(temp);
+
+  bool tempo = Firebase.pushFloat("/sensor/temperatura", temp);
+  bool umidade = Firebase.pushFloat("/sensor/umidade", umid);
+
+  if (tempo && umidade) {
+    Serial.println("Potenciômetro registrado no Firebase!!");
+  } else {
+    Serial.println("Falha ao registrar potenciômetro no Firebase:");
+    Serial.println(Firebase.error()); 
+  }
+
+
 }
 
 void loop()
