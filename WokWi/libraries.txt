@@ -4,3 +4,5 @@ thinger.io
 LiquidCrystal I2C
 LiquidCrystal
 DHT sensor library
+https://github.com/aaaaaaaaana/ArduinoJson.git
+https://github.com/ArtronShop/IOXhop_FirebaseESP32.git
